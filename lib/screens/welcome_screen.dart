@@ -1,3 +1,5 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flash_chat/components/rounded_button.dart';
 import 'package:flash_chat/screens/login_screen.dart';
 import 'package:flash_chat/screens/registration_screen.dart';
 import 'package:flutter/animation.dart';
@@ -15,21 +17,31 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   late Animation animation;
   @override
   void initState() {
-    super.initState();
-
-    controller = AnimationController(
-      duration: Duration(seconds: 3),
-      vsync: this,
-      //upperBound: 100,
-    );
+    // Firebase initializeApp 1번만 필요
+    Firebase.initializeApp().whenComplete(() {
+      print("firebase init");
+      setState(() {});
+    });
+    // 애니메이션 컨트롤러
+    controller =
+        AnimationController(duration: const Duration(seconds: 3), vsync: this
+            //upperBound: 100,
+            );
     animation = ColorTween(begin: Colors.white, end: Colors.blue.shade500)
         .animate(controller);
     //animation = CurvedAnimation(parent: controller, curve: Curves.easeIn);
     controller.forward();
     controller.addListener(() {
       setState(() {});
-      print(controller.value);
     });
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -37,7 +49,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     return Scaffold(
       backgroundColor: animation.value,
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.0),
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -51,7 +63,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                     height: 60.0,
                   ),
                 ),
-                Text(
+                const Text(
                   'Flash Chat',
                   style: TextStyle(
                     fontSize: 30.0,
@@ -64,41 +76,19 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             const SizedBox(
               height: 48.0,
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                elevation: 5.0,
-                color: Colors.lightBlueAccent,
-                borderRadius: BorderRadius.circular(30.0),
-                child: MaterialButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, LoginScreen.id);
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: Text(
-                    'Log In',
-                  ),
-                ),
-              ),
+            RoundedButton(
+              "Log in",
+              Colors.lightBlueAccent,
+              () {
+                Navigator.pushNamed(context, LoginScreen.id);
+              },
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                color: Colors.blueAccent,
-                borderRadius: BorderRadius.circular(30.0),
-                elevation: 5.0,
-                child: MaterialButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, RegistrationScreen.id);
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: Text(
-                    'Register',
-                  ),
-                ),
-              ),
+            RoundedButton(
+              "Register",
+              Colors.blueAccent,
+              () {
+                Navigator.pushNamed(context, RegistrationScreen.id);
+              },
             ),
           ],
         ),
