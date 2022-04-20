@@ -76,7 +76,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         email: email, password: password);
                     if (newUser != null) {
                       Navigator.popAndPushNamed(context, ChatScreen.id);
-                      // TODO: 이렇게 채팅으로 진입해도 괜찮은가?.. 뒤로가게되면..;?
                     }
                   } catch (e) {
                     // TODO: print말고 사용자에게 alert하도록 변경이 필요해보임
