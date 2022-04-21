@@ -14,7 +14,7 @@ class _ChatScreenState extends State<ChatScreen> {
   late User loggedInUser;
   String msg = "";
 
-  final _firestore = FirebaseFirestore.instance.collection('messages');
+  final _firestore = FirebaseFirestore.instance.collection('msg');
 
   void getCurrentUser() async {
     final user = await _auth.currentUser;
@@ -68,7 +68,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   TextButton(
                     onPressed: () {
                       _firestore
-                          .add({'text': msg, "sender": loggedInUser.email});
+                          .add({"sender": loggedInUser.email, 'text': msg});
                       print("ok");
                     },
                     child: const Text(
